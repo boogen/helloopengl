@@ -1,26 +1,29 @@
 program_NAME := hello
 
-CC=g++
+CC = g++
 
 program_CXX_SRCS := $(wildcard *.cpp)
 OBJ_DIR := .obj
 program_CXX_OBJS  := $(patsubst %,$(OBJ_DIR)/%,${program_CXX_SRCS:.cpp=.o})
 
-program_INCLUDE_DIRS := include/SDL
+program_INCLUDE_DIRS := include/SDL,include/MyGUI,include/MyGUIEngine,include/OpenGLPlatform
 
-program_LIBRARIES := GL glfw SDL SDL_image
+program_LIBRARIES := mingw32 SDLmain SDL SDL_image glfwdll opengl32
 
+CPPFLAGS +=-DGLFW_DLL
 CPPFLAGS += $(foreach includedir,$(program_INCLUDE_DIRS),-I$(includedir))
 
 LDFLAGS += $(foreach librarydir,$(program_LIBRARY_DIRS),-L$(librarydir))
 
 LDFLAGS += $(foreach library,$(program_LIBRARIES),-l$(library))
 
+
+
 $(OBJ_DIR)/%.o:%.cpp
-	$(CC) -c -ggdb -o $@ $<
+	$(CC) -DGLFW_DLL -ggdb -c -o $@ $<
 
 $(program_NAME): $(program_CXX_OBJS)
-	$(CC) $(program_CXX_OBJS) -ggdb -Llib -framework Cocoa -framework OpenGL -lglew -lglfw -framework IOKit -framework SDL -framework SDL_image -o $(program_NAME)
+	$(CC) $(program_CXX_OBJS) -ggdb -Llib -lmingw32 -lSDLmain -lSDL -lSDL_image -lglew32 -lglfwdll -lopengl32 -o $(program_NAME)
 
 clean:
 	@- $(RM) bin/$(program_NAME)

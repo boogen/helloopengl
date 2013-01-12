@@ -2,6 +2,9 @@
 #include "include/GL/glfw.h"
 #include <cstdlib>
 #include <iostream>
+#include <cstdio>
+#include <string>
+
 
 GLuint program;
 
